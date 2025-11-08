@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Page Not Found - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            text-align: center; 
+            padding: 20px;
+        }
+        .error-container { 
+            background: white; 
+            padding: 3rem; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .error-code { 
+            font-size: 6rem; 
+            color: #dc3545; 
+            margin-bottom: 1rem; 
+            line-height: 1;
+        }
+        .error-message { 
+            font-size: 1.5rem; 
+            color: #333; 
+            margin-bottom: 1rem; 
+        }
+        .error-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn { 
+            display: inline-block; 
+            padding: 1rem 2rem; 
+            background: #dc3545; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin: 0 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #c82333;
+        }
+        .btn-secondary {
+            background: #6c757d;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        .button-group {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-message">Page Not Found</h1>
+        <p class="error-description">
+            The page you're looking for doesn't exist or has been moved. 
+            Please check the URL or navigate back to home.
+        </p>
+        <div class="button-group">
+            <a href="/bms/" class="btn">🏠 Go Home</a>
+            <a href="/bms/login" class="btn btn-secondary">🔐 Login</a>
+            <button onclick="history.back()" class="btn btn-secondary">↩️ Go Back</button>
+        </div>
+    </div>
+</body>
+</html>

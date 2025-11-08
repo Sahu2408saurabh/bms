@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Request - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1.5rem; text-align: center; border-radius: 10px 10px 0 0; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; margin: 0 0.5rem; }
+        .form-container { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: #dc3545; 
+        }
+        .btn { 
+            background: #dc3545; 
+            color: white; 
+            padding: 1rem 2rem; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn:hover { background: #c82333; }
+        .alert { 
+            padding: 1rem; 
+            border-radius: 5px; 
+            margin-bottom: 1rem; 
+        }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+        .required::after { content: " *"; color: #dc3545; }
+        .urgency-high { border-left: 4px solid #dc3545; padding-left: 10px; background: #f8d7da; }
+        .urgency-medium { border-left: 4px solid #ffc107; padding-left: 10px; background: #fff3cd; }
+        .urgency-low { border-left: 4px solid #28a745; padding-left: 10px; background: #d4edda; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🆘 Blood Request</h1>
+            <p>Submit your blood requirement - We're here to help!</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">Home</a>
+            <a href="/bms/donor/register">Donor Registration</a>
+            <a href="/bms/blood/availability">Blood Availability</a>
+            <a href="/bms/recipient/request">Blood Request</a>
+            <a href="/bms/login">Login</a>
+        </nav>
+        
+        <div class="form-container">
+            <!-- Success Message -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                Blood request submitted successfully! We will contact you soon.
+            </div>
+            
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-error" style="display: none;">
+                Request submission failed! Please try again.
+            </div>
+            
+            <form action="/bms/recipient/request" method="post">
+                <!-- Patient Information -->
+                <h3>Patient Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="patientName" class="required">Patient Name</label>
+                        <input type="text" id="patientName" name="patientName" placeholder="Enter patient name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="patientAge">Patient Age</label>
+                        <input type="number" id="patientAge" name="patientAge" placeholder="Enter age" min="1" max="120">
+                    </div>
+                </div>
+                
+                <!-- Blood Requirement -->
+                <h3>Blood Requirement</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bloodGroup" class="required">Blood Group</label>
+                        <select id="bloodGroup" name="bloodGroup" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A_POSITIVE">A+</option>
+                            <option value="A_NEGATIVE">A-</option>
+                            <option value="B_POSITIVE">B+</option>
+                            <option value="B_NEGATIVE">B-</option>
+                            <option value="O_POSITIVE">O+</option>
+                            <option value="O_NEGATIVE">O-</option>
+                            <option value="AB_POSITIVE">AB+</option>
+                            <option value="AB_NEGATIVE">AB-</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="units" class="required">Units Required</label>
+                        <input type="number" id="units" name="units" placeholder="Number of units" min="1" max="10" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="urgency" class="required">Urgency Level</label>
+                        <select id="urgency" name="urgency" required onchange="updateUrgencyStyle()">
+                            <option value="">Select Urgency</option>
+                            <option value="LOW">Low (Within 1 week)</option>
+                            <option value="MEDIUM">Medium (Within 3 days)</option>
+                            <option value="HIGH">High (Within 24 hours)</option>
+                            <option value="CRITICAL">Critical (Immediate)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requiredDate">Required Date</label>
+                        <input type="date" id="requiredDate" name="requiredDate">
+                    </div>
+                </div>
+                
+                <!-- Hospital Information -->
+                <h3>Hospital Information</h3>
+                
+                <div class="form-group">
+                    <label for="hospital">Hospital Name</label>
+                    <input type="text" id="hospital" name="hospital" placeholder="Enter hospital name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Hospital Address</label>
+                    <textarea id="address" name="address" rows="3" placeholder="Enter hospital address"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" placeholder="Enter city">
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <h3>Contact Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactPerson" class="required">Contact Person</label>
+                        <input type="text" id="contactPerson" name="contactPerson" placeholder="Contact person name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactPhone" class="required">Contact Phone</label>
+                        <input type="tel" id="contactPhone" name="contactPhone" placeholder="Contact phone number" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Additional Notes</label>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Any additional information..."></textarea>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="btn">Submit Blood Request</button>
+                    <a href="/bms/" class="btn" style="background: #6c757d; margin-left: 1rem;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check URL parameters for messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('success')) {
+                document.getElementById('successMessage').style.display = 'block';
+            }
+            
+            if (urlParams.get('error')) {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('requiredDate').min = today;
+        });
+
+        function updateUrgencyStyle() {
+            const urgencySelect = document.getElementById('urgency');
+            const selectedOption = urgencySelect.options[urgencySelect.selectedIndex];
+            
+            // Remove previous styles
+            urgencySelect.classList.remove('urgency-high', 'urgency-medium', 'urgency-low');
+            
+            // Add style based on selection
+            if (selectedOption.value === 'CRITICAL' || selectedOption.value === 'HIGH') {
+                urgencySelect.classList.add('urgency-high');
+            } else if (selectedOption.value === 'MEDIUM') {
+                urgencySelect.classList.add('urgency-medium');
+            } else if (selectedOption.value === 'LOW') {
+                urgencySelect.classList.add('urgency-low');
+            }
+        }
+    </script>
+</body>
+</html>

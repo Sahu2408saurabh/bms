@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Donations - Staff</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: #007bff; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .main-content { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .table-container { overflow-x: auto; margin: 1rem 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .status-completed { background: #d4edda; color: #155724; padding: 0.3rem 0.8rem; border-radius: 20px; }
+        .stats { display: flex; gap: 1rem; margin: 1rem 0; }
+        .stat-card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; text-align: center; border-top: 4px solid #28a745; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💉 Manage Donations - Staff Panel</h1>
+        </header>
+        
+        <nav>
+            <div>
+                <a href="/bms/staff/dashboard">📊 Dashboard</a>
+                <a href="/bms/staff/requests">🆘 Requests</a>
+                <a href="/bms/staff/donations" style="background: #007bff;">💉 Donations</a>
+                <a href="/bms/staff/inventory">🩸 Inventory</a>
+            </div>
+            <div>
+                <a href="/bms/staff/donations/new" style="background: #28a745;">➕ New Donation</a>
+                <a href="/bms/staff/profile">👤 Profile</a>
+                <a href="/bms/logout" style="background: #6c757d;">🚪 Logout</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <h2>Donation Records</h2>
+
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${#lists.size(donations)}">0</div>
+                    <div>Total Donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${todayDonations}">0</div>
+                    <div>Today's Donations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${#lists.size(#lists.select(donations, 'donationDate == T(java.time.LocalDate).now()'))}">0</div>
+                    <div>Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${totalBloodVolume}">0</div>
+                    <div>Total ML Donated</div>
+                </div>
+            </div>
+
+            <!-- Donations Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donation ID</th>
+                            <th>Donor Name</th>
+                            <th>Blood Group</th>
+                            <th>Volume (ML)</th>
+                            <th>Donation Date</th>
+                            <th>Next Eligible</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="donation : ${donations}">
+                            <td th:text="${donation.id}">101</td>
+                            <td th:text="${donation.donor.fullName}">Rahul Sharma</td>
+                            <td th:text="${donation.bloodGroup.displayName}">O+</td>
+                            <td th:text="${donation.bloodVolumeML} + ' ML'">450 ML</td>
+                            <td th:text="${#dates.format(donation.donationDate, 'dd/MM/yyyy')}">30/09/2024</td>
+                            <td th:text="${#dates.format(donation.nextEligibleDate, 'dd/MM/yyyy')}">29/12/2024</td>
+                            <td>
+                                <span th:if="${donation.status == 'COMPLETED'}" class="status-completed">✅ Completed</span>
+                                <span th:if="${donation.status == 'SCHEDULED'}" style="background: #fff3cd; color: #856404; padding: 0.3rem 0.8rem; border-radius: 20px;">⏰ Scheduled</span>
+                            </td>
+                            <td>
+                                <a th:href="@{/donor/profile/{id}(id=${donation.donor.id})}" class="btn btn-primary">View Donor</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(donations)}">
+                            <td colspan="8" style="text-align: center; padding: 2rem;">
+                                No donation records found.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <a href="/bms/staff/donations/new" class="btn btn-success">➕ Record New Donation</a>
+                <a href="/bms/staff/dashboard" class="btn btn-primary">📊 Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

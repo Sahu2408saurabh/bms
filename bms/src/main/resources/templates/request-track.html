@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Blood Request - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1.5rem; text-align: center; border-radius: 10px 10px 0 0; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .track-container { background: white; padding: 2rem; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        input { width: 100%; padding: 0.75rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem; }
+        input:focus { outline: none; border-color: #dc3545; }
+        .btn { background: #dc3545; color: white; padding: 1rem 2rem; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; }
+        .alert { padding: 1rem; border-radius: 5px; margin-bottom: 1rem; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 Track Blood Request</h1>
+            <p>Check your blood request status</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">Home</a>
+            <a href="/bms/recipient/request">Blood Request</a>
+            <a href="/bms/blood/availability">Blood Availability</a>
+            <a href="/bms/recipient/track">Track Request</a>
+        </nav>
+        
+        <div class="track-container">
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+            
+            <form action="/bms/recipient/track" method="post">
+                <div class="form-group">
+                    <label for="phoneNumber">Enter Your Phone Number</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter registered phone number" required>
+                </div>
+                
+                <button type="submit" class="btn">Track Request</button>
+            </form>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: #e9ecef; border-radius: 5px;">
+                <h3>📞 Need Immediate Help?</h3>
+                <p><strong>Emergency Helpline:</strong> +91-9876543210</p>
+                <p>Available 24/7 for urgent blood requirements</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

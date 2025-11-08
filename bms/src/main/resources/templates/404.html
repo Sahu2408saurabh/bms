@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Blood Bank</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .error-container {
+            text-align: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #dc3545;
+            line-height: 1;
+            margin: 1rem 0;
+        }
+        .error-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn { 
+            padding: 0.75rem 1.5rem; 
+            border: none; 
+            border-radius: 5px; 
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .btn-primary { 
+            background: #dc3545; 
+            color: white; 
+        }
+        .btn-primary:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .btn-secondary { 
+            background: #6c757d; 
+            color: white; 
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        .search-box {
+            margin: 2rem 0;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .search-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .blood-drop {
+            animation: bounce 2s infinite;
+            display: inline-block;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- Animated Blood Drop Icon -->
+        <div class="error-icon">
+            <div class="blood-drop">🩸</div>
+        </div>
+        
+        <!-- Error Code -->
+        <div class="error-code">404</div>
+        
+        <!-- Error Title -->
+        <h1 class="error-title">Page Not Found</h1>
+        
+        <!-- Error Message -->
+        <p class="error-message">
+            The page you're looking for seems to have been lost in the bloodstream. 
+            Don't worry, we'll help you get back on track!
+        </p>
+
+        <!-- Search Box -->
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="What are you looking for?">
+            <button class="search-btn">Search</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="btn-group">
+            <a href="/bms/" class="btn btn-primary">🏠 Go Home</a>
+            <a href="/bms/blood/availability" class="btn btn-secondary">💉 Blood Availability</a>
+            <a href="/bms/donor/register" class="btn btn-secondary">👥 Donor Registration</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">↩️ Go Back</a>
+        </div>
+
+        <!-- Additional Help -->
+        <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;">
+            <p style="color: #666; font-size: 0.9rem;">
+                Need immediate help? 
+                <a href="/bms/contact" style="color: #dc3545; text-decoration: none;">Contact Support</a> 
+                or call <strong>📞 +91-9876543210</strong>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const query = document.querySelector('.search-input').value;
+            if (query.trim()) {
+                // Simple search redirection (can be enhanced)
+                window.location.href = '/bms/search?q=' + encodeURIComponent(query);
+            }
+        });
+
+        // Enter key support for search
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

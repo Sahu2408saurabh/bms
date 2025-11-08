@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Blood Requests - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .table-container { background: white; margin: 2rem 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #dc3545; color: white; }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Manage Blood Requests</h1>
+        </header>
+        <nav>
+            <a href="/bms/admin/dashboard">Dashboard</a>
+            <a href="/bms/admin/donors">Donors</a>
+            <a href="/bms/admin/blood-inventory">Inventory</a>
+            <a href="/bms/admin/blood-requests">Requests</a>
+            <a href="/bms/logout">Logout</a>
+        </nav>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Blood Group</th>
+                        <th>Units</th>
+                        <th>Hospital</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rohan Mehta</td>
+                        <td>O+</td>
+                        <td>2</td>
+                        <td>City Hospital</td>
+                        <td>HIGH</td>
+                        <td>PENDING</td>
+                        <td>
+                            <form action="/bms/admin/blood-request/update-status" method="post" style="display: inline;">
+                                <input type="hidden" name="requestId" value="1">
+                                <button type="submit" name="status" value="APPROVED" class="btn btn-success">Approve</button>
+                                <button type="submit" name="status" value="REJECTED" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sneha Patel</td>
+                        <td>A+</td>
+                        <td>1</td>
+                        <td>General Hospital</td>
+                        <td>MEDIUM</td>
+                        <td>PENDING</td>
+                        <td>
+                            <form action="/bms/admin/blood-request/update-status" method="post" style="display: inline;">
+                                <input type="hidden" name="requestId" value="2">
+                                <button type="submit" name="status" value="APPROVED" class="btn btn-success">Approve</button>
+                                <button type="submit" name="status" value="REJECTED" class="btn btn-danger">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

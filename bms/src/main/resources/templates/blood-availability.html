@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Availability - Blood Bank</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: #f4f4f4;
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+        header { 
+            background: #dc3545; 
+            color: white; 
+            padding: 1.5rem; 
+            text-align: center; 
+            border-radius: 10px 10px 0 0;
+        }
+        nav { 
+            background: #333; 
+            padding: 1rem; 
+        }
+        nav a { 
+            color: white; 
+            text-decoration: none; 
+            padding: 0.5rem 1rem; 
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+        nav a:hover {
+            background: #555;
+        }
+        .blood-table { 
+            background: white; 
+            margin: 2rem 0; 
+            border-radius: 0 0 10px 10px;
+            overflow: hidden; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        th, td { 
+            padding: 1rem; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; 
+        }
+        th { 
+            background: #dc3545; 
+            color: white; 
+            font-weight: 600;
+        }
+        tr:hover {
+            background: #f8f9fa;
+        }
+        .available { 
+            color: #28a745; 
+            font-weight: bold;
+            background: #d4edda;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .critical { 
+            color: #ffc107; 
+            font-weight: bold;
+            background: #fff3cd;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .out-of-stock { 
+            color: #dc3545; 
+            font-weight: bold;
+            background: #f8d7da;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🩸 Blood Availability</h1>
+            <p>Real-time blood stock information</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">🏠 Home</a>
+            <a href="/bms/donor/register">👤 Donor Registration</a>
+            <a href="/bms/blood/availability">💉 Blood Availability</a>
+            <a href="/bms/donor/list">📋 Donor List</a>
+            <a href="/bms/login">🔐 Admin Login</a>
+        </nav>
+
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div>Blood Groups</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">153</div>
+                <div>Total Units Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div>Groups in Stock</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div>Low Stock</div>
+            </div>
+        </div>
+        
+        <!-- Blood Availability Table -->
+        <div class="blood-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Blood Group</th>
+                        <th>Available Units</th>
+                        <th>Quantity (ML)</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A+</strong></td>
+                        <td>25</td>
+                        <td>5000 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>A-</strong></td>
+                        <td>15</td>
+                        <td>3000 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B+</strong></td>
+                        <td>30</td>
+                        <td>6000 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B-</strong></td>
+                        <td>12</td>
+                        <td>2400 ML</td>
+                        <td><span class="critical">CRITICAL</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>O+</strong></td>
+                        <td>40</td>
+                        <td>8000 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>O-</strong></td>
+                        <td>8</td>
+                        <td>1600 ML</td>
+                        <td><span class="critical">CRITICAL</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AB+</strong></td>
+                        <td>18</td>
+                        <td>3600 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AB-</strong></td>
+                        <td>5</td>
+                        <td>1000 ML</td>
+                        <td><span class="available">AVAILABLE</span></td>
+                        <td>30/09/2024</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Additional Information -->
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; margin-top: 1rem;">
+            <h3>💡 Important Information</h3>
+            <ul style="margin-top: 1rem; line-height: 1.6;">
+                <li>✅ <strong>Available:</strong> Sufficient stock available</li>
+                <li>⚠️ <strong>Critical:</strong> Low stock - urgent donations needed</li>
+                <li>❌ <strong>Out of Stock:</strong> Currently unavailable</li>
+                <li>Blood units are updated in real-time</li>
+                <li>For emergency requirements, please contact our helpline</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

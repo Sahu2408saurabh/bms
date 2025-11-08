@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Status - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1.5rem; text-align: center; border-radius: 10px 10px 0 0; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .status-container { background: white; padding: 2rem; border-radius: 0 0 10px 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .status-card { background: #f8f9fa; padding: 2rem; border-radius: 10px; margin-bottom: 2rem; border-left: 5px solid #dc3545; }
+        .status-badge { padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        .status-fulfilled { background: #d1ecf1; color: #0c5460; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+        .info-item { padding: 1rem; background: white; border-radius: 5px; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 5px; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Blood Request Status</h1>
+            <p>Track your blood request</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">Home</a>
+            <a href="/bms/recipient/request">New Request</a>
+            <a href="/bms/recipient/track">Track Another</a>
+        </nav>
+
+        <div class="status-container">
+            <div class="status-card">
+                <h2>Request Details</h2>
+                
+                <div th:if="${request}" class="request-details">
+                    <!-- Status Badge -->
+                    <div style="margin-bottom: 1.5rem;">
+                        <span th:classappend="'status-badge ' + 
+                            (${request.status} == 'PENDING'} ? 'status-pending' :
+                            (${request.status} == 'APPROVED'} ? 'status-approved' :
+                            (${request.status} == 'REJECTED'} ? 'status-rejected' : 'status-fulfilled')"
+                            th:text="${request.status}">
+                            PENDING
+                        </span>
+                    </div>
+
+                    <!-- Request Information -->
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Patient Name:</strong><br>
+                            <span th:text="${request.patientName}">Rohan Mehta</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Blood Group:</strong><br>
+                            <span th:text="${request.bloodGroup.displayName}">O+</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Units Required:</strong><br>
+                            <span th:text="${request.units}">2</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Urgency:</strong><br>
+                            <span th:text="${request.urgency}">HIGH</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Hospital:</strong><br>
+                            <span th:text="${request.hospital}">City Hospital</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Contact Person:</strong><br>
+                            <span th:text="${request.contactPerson}">Mrs. Mehta</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Contact Phone:</strong><br>
+                            <span th:text="${request.contactPhone}">9876543220</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Request Date:</strong><br>
+                            <span th:text="${#dates.format(request.requestDate, 'dd/MM/yyyy')}">30/09/2024</span>
+                        </div>
+                    </div>
+
+                    <!-- Additional Notes -->
+                    <div th:if="${request.notes}" style="margin-top: 1rem; padding: 1rem; background: #e9ecef; border-radius: 5px;">
+                        <strong>Staff Notes:</strong><br>
+                        <span th:text="${request.notes}">Additional information from staff</span>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: #d1ecf1; border-radius: 8px;">
+                        <h3>📞 Next Steps</h3>
+                        <p th:if="${request.status == 'PENDING'}">✅ Your request is under review. Our team will contact you within 1 hour.</p>
+                        <p th:if="${request.status == 'APPROVED'}">✅ Your request has been approved! Blood is being arranged.</p>
+                        <p th:if="${request.status == 'REJECTED'}">❌ Request rejected. Please contact us for more information.</p>
+                        <p th:if="${request.status == 'FULFILLED'}">🎉 Request fulfilled! Thank you for using our service.</p>
+                        
+                        <p><strong>Emergency Helpline:</strong> +91-9876543210 (24/7)</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; text-align: center;">
+                    <a href="/bms/recipient/track" class="btn btn-primary">Track Another Request</a>
+                    <a href="/bms/recipient/request" class="btn btn-primary" style="background: #28a745;">New Request</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

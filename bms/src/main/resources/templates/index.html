@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management System</title>
+    
+    <style>
+        /* === CSS RESET === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === VARIABLES === */
+        :root {
+            --primary-color: #dc3545;
+            --secondary-color: #28a745;
+            --dark-color: #333;
+            --light-color: #f4f4f4;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+
+        /* === BASE STYLES === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* === HEADER STYLES === */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #c82333 100%);
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🩸';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* === NAVIGATION STYLES === */
+        nav {
+            background: var(--dark-color);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.2rem;
+            margin: 0 0.3rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* === HERO SECTION === */
+        .hero-section {
+            text-align: center;
+            padding: 5rem 0;
+            background: white;
+            margin: 2rem 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .hero-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* === BUTTON STYLES === */
+        .buttons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #c82333 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #1e7e34 100%);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info-color) 0%, #138496 100%);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* === FEATURES SECTION === */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        /* === STATS SECTION === */
+        .stats {
+            background: linear-gradient(135deg, var(--dark-color) 0%, #495057 100%);
+            color: white;
+            padding: 4rem 0;
+            border-radius: 15px;
+            margin: 4rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* === FOOTER STYLES === */
+        footer {
+            background: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            transition: background 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* === BLOOD GROUP DISPLAY === */
+        .blood-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .blood-group {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 2px solid var(--primary-color);
+        }
+
+        .blood-group .type {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .blood-group .count {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container header-content">
+            <h1>🩸 Blood Bank Management System</h1>
+            <p>Connecting Donors with Recipients - Saving Lives Together</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <a href="#" class="logo">BloodBank</a>
+            <ul class="nav-links">
+                <li><a th:href="@{/}">🏠 Home</a></li>
+                <li><a th:href="@{/donor/register}">👤 Donor Registration</a></li>
+                <li><a th:href="@{/blood/availability}">💉 Blood Availability</a></li>
+                <li><a th:href="@{/recipient/request}">🆘 Blood Request</a></li>
+                <!-- ✅ NEW: Staff Registration Link -->
+                <li><a th:href="@{/staff/register}">👨‍💼 Staff Registration</a></li>
+                <li><a th:href="@{/login}">🔐 Login</a></li>
+                <li><a th:href="@{/admin/dashboard}">⚙️ Admin</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section fade-in">
+            <h2>Welcome to LifeSaver Blood Bank</h2>
+            <p>Your single drop can save someone's life. Join us in our mission to ensure no one dies due to unavailability of blood.</p>
+            
+            <div class="buttons">
+                <a th:href="@{/donor/register}" class="btn btn-primary">
+                    🎯 Become a Donor
+                </a>
+                <a th:href="@{/staff/register}" class="btn btn-info">
+                    👨‍💼 Join as Staff
+                </a>
+                <a th:href="@{/blood/availability}" class="btn btn-secondary">
+                    🔍 Find Blood
+                </a>
+                <a th:href="@{/recipient/request}" class="btn btn-outline">
+                    🆘 Emergency Request
+                </a>
+            </div>
+        </section>
+
+        <!-- Blood Availability Preview -->
+        <section class="blood-availability">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Current Blood Stock</h2>
+            <div class="blood-groups">
+                <div class="blood-group">
+                    <div class="type">A+</div>
+                    <div class="count">25 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">A-</div>
+                    <div class="count">15 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">B+</div>
+                    <div class="count">30 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">B-</div>
+                    <div class="count">12 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">O+</div>
+                    <div class="count">40 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">O-</div>
+                    <div class="count">8 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">AB+</div>
+                    <div class="count">18 Units</div>
+                </div>
+                <div class="blood-group">
+                    <div class="type">AB-</div>
+                    <div class="count">5 Units</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🩺</div>
+                <h3>Donor Registration</h3>
+                <p>Register as a blood donor and help save lives. Simple process with regular health checkups.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍💼</div>
+                <h3>Staff Registration</h3>
+                <p>Join our team! Register as staff member. Admin approval required for activation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>Blood Search</h3>
+                <p>Find required blood groups quickly with our advanced search and filtering system.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚨</div>
+                <h3>Emergency Requests</h3>
+                <p>Urgent blood requirements? Submit emergency requests for immediate assistance.</p>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 id="donorsCount">0</h3>
+                    <p>Registered Donors</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="livesSaved">0</h3>
+                    <p>Lives Saved</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="bloodUnits">0</h3>
+                    <p>Blood Units Collected</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="camps">0</h3>
+                    <p>Blood Donation Camps</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-info">
+                <p>&copy; 2024 Blood Bank Management System. All rights reserved.</p>
+                <p>📞 Helpline: +91-9876543210 | 📧 Email: help@bloodbank.org</p>
+            </div>
+            <div class="social-links">
+                <a href="#" title="Facebook">📘</a>
+                <a href="#" title="Twitter">🐦</a>
+                <a href="#" title="Instagram">📷</a>
+                <a href="#" title="LinkedIn">💼</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Counter Animation for Statistics
+        function animateCounter(elementId, finalValue, duration = 2000) {
+            let element = document.getElementById(elementId);
+            let startValue = 0;
+            let increment = finalValue / (duration / 16);
+            let currentValue = startValue;
+
+            function updateCounter() {
+                currentValue += increment;
+                if (currentValue < finalValue) {
+                    element.textContent = Math.floor(currentValue);
+                    setTimeout(updateCounter, 16);
+                } else {
+                    element.textContent = finalValue;
+                }
+            }
+            updateCounter();
+        }
+
+        // Initialize counters when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate statistics counters
+            animateCounter('donorsCount', 1250);
+            animateCounter('livesSaved', 890);
+            animateCounter('bloodUnits', 2100);
+            animateCounter('camps', 45);
+
+            // Add hover effects to feature cards
+            const featureCards = document.querySelectorAll('.feature-card');
+            featureCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Blood group click event
+            const bloodGroups = document.querySelectorAll('.blood-group');
+            bloodGroups.forEach(group => {
+                group.addEventListener('click', function() {
+                    const bloodType = this.querySelector('.type').textContent;
+                    alert(`You selected ${bloodType} blood group. Redirecting to availability page...`);
+                    // In actual implementation, redirect to blood availability page
+                    // window.location.href = `/blood/availability?group=${bloodType}`;
+                });
+            });
+
+            // Smooth scroll for navigation links
+            document.querySelectorAll('nav a').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId.startsWith('#')) {
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    } else {
+                        // For Thymeleaf links, let them work normally
+                        window.location.href = this.getAttribute('th:href') || this.getAttribute('href');
+                    }
+                });
+            });
+
+            // Notification system (simulated)
+            function showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 1rem 2rem;
+                    background: ${type === 'success' ? 'var(--success-color)' : 
+                                type === 'error' ? 'var(--danger-color)' : 
+                                'var(--info-color)'};
+                    color: white;
+                    border-radius: 5px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    z-index: 1000;
+                    transform: translateX(100%);
+                    transition: transform 0.3s ease;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(0)';
+                }, 100);
+
+                setTimeout(() => {
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 4000);
+            }
+
+            // Simulate a welcome notification
+            setTimeout(() => {
+                showNotification('Welcome to Blood Bank Management System! 🩸', 'success');
+            }, 1000);
+        });
+
+        // Emergency alert function
+        function emergencyAlert() {
+            const bloodType = prompt('Enter required blood type (e.g., A+, B-, O+):');
+            if (bloodType) {
+                if (isValidBloodType(bloodType)) {
+                    showNotification(`Emergency request submitted for ${bloodType} blood! Our team will contact you shortly.`, 'error');
+                    // In actual implementation, submit emergency request
+                } else {
+                    alert('Please enter a valid blood type (A+, A-, B+, B-, O+, O-, AB+, AB-)');
+                }
+            }
+        }
+
+        // Validate blood type
+        function isValidBloodType(type) {
+            const validTypes = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
+            return validTypes.includes(type.toUpperCase());
+        }
+
+        // Search blood availability
+        function searchBlood() {
+            const bloodType = prompt('Enter blood type to search:');
+            if (bloodType && isValidBloodType(bloodType)) {
+                // In actual implementation, redirect to search results
+                window.location.href = `/blood/availability?group=${bloodType}`;
+            } else if (bloodType) {
+                alert('Please enter a valid blood type');
+            }
+        }
+    </script>
+</body>
+</html>

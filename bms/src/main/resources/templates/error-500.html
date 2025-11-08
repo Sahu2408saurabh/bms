@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Server Error - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            text-align: center; 
+            padding: 20px;
+        }
+        .error-container { 
+            background: white; 
+            padding: 3rem; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+        .error-code { 
+            font-size: 6rem; 
+            color: #dc3545; 
+            margin-bottom: 1rem; 
+            line-height: 1;
+        }
+        .error-message { 
+            font-size: 1.5rem; 
+            color: #333; 
+            margin-bottom: 1rem; 
+        }
+        .error-description {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .btn { 
+            display: inline-block; 
+            padding: 1rem 2rem; 
+            background: #dc3545; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+            margin: 0 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #c82333;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .button-group {
+            margin-top: 2rem;
+        }
+        .contact-info {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">500</div>
+        <h1 class="error-message">Internal Server Error</h1>
+        <p class="error-description">
+            Something went wrong on our end. Our technical team has been notified 
+            and is working to fix the issue. Please try again later.
+        </p>
+        
+        <div class="contact-info">
+            <p><strong>Need immediate help?</strong></p>
+            <p>📞 +91-9876543210</p>
+            <p>📧 support@bloodbank.org</p>
+        </div>
+        
+        <div class="button-group">
+            <a href="/bms/" class="btn">🏠 Go Home</a>
+            <button onclick="location.reload()" class="btn btn-success">🔄 Try Again</button>
+            <button onclick="history.back()" class="btn">↩️ Go Back</button>
+        </div>
+    </div>
+</body>
+</html>

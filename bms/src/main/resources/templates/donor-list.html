@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor List - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .donor-table { background: white; margin: 2rem 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #dc3545; color: white; }
+        .available { color: #28a745; }
+        .unavailable { color: #dc3545; }
+        .stats { display: flex; gap: 1rem; margin: 1rem 0; }
+        .stat-card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; text-align: center; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Donor List</h1>
+        </header>
+        
+        <nav>
+            <a href="/bms/">Home</a>
+            <a href="/bms/donor/register">Donor Registration</a>
+            <a href="/bms/donor/list">All Donors</a>
+            <a href="/bms/blood/availability">Blood Availability</a>
+            <a href="/bms/login">Login</a>
+        </nav>
+        
+        <!-- Statistics -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">3</div>
+                <div>Total Donors</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2</div>
+                <div>Available Donors</div>
+            </div>
+        </div>
+        
+        <!-- Donor Table -->
+        <div class="donor-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Blood Group</th>
+                        <th>City</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Rahul Sharma</td>
+                        <td>rahul@example.com</td>
+                        <td>9876543210</td>
+                        <td>O+</td>
+                        <td>Mumbai</td>
+                        <td><span class="available">Available</span></td>
+                    </tr>
+                    <tr>
+                        <td>Priya Singh</td>
+                        <td>priya@example.com</td>
+                        <td>9876543211</td>
+                        <td>A+</td>
+                        <td>Delhi</td>
+                        <td><span class="available">Available</span></td>
+                    </tr>
+                    <tr>
+                        <td>Amit Kumar</td>
+                        <td>amit@example.com</td>
+                        <td>9876543212</td>
+                        <td>B+</td>
+                        <td>Bangalore</td>
+                        <td><span class="unavailable">Not Available</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

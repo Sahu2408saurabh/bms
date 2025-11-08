@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .content { background: white; padding: 2rem; margin: 2rem 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>About Blood Bank Management System</h1>
+        </header>
+        <nav>
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/donor/register}">Donor Registration</a>
+            <a th:href="@{/blood/availability}">Blood Availability</a>
+            <a th:href="@{/about}">About</a>
+            <a th:href="@{/contact}">Contact</a>
+        </nav>
+        <div class="content">
+            <h2>Our Mission</h2>
+            <p>To ensure that no one dies due to unavailability of blood.</p>
+            
+            <h2>What We Do</h2>
+            <p>We connect blood donors with recipients through our automated system.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Profile - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { background: #007bff; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .profile-container { display: grid; grid-template-columns: 300px 1fr; gap: 20px; margin: 2rem 0; }
+        .profile-sidebar { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .profile-main { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .profile-header { text-align: center; margin-bottom: 2rem; }
+        .profile-avatar { font-size: 4rem; margin-bottom: 1rem; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+        .stat-card { background: #f8f9fa; padding: 1rem; border-radius: 8px; text-align: center; border-left: 4px solid #007bff; }
+        .stat-number { font-size: 1.5rem; font-weight: bold; color: #007bff; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+        .info-item { padding: 1rem; background: #f8f9fa; border-radius: 5px; }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #007bff; color: white; }
+        .active-status { background: #d4edda; color: #155724; padding: 0.3rem 0.8rem; border-radius: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👤 Staff Profile - Blood Bank</h1>
+        </header>
+        
+        <nav>
+            <div>
+                <a href="/bms/staff/dashboard">📊 Dashboard</a>
+                <a href="/bms/staff/requests">🆘 Requests</a>
+                <a href="/bms/staff/donations">💉 Donations</a>
+                <a href="/bms/staff/inventory">🩸 Inventory</a>
+            </div>
+            <div>
+                <a href="/bms/staff/profile" style="background: #007bff;">👤 Profile</a>
+                <a href="/bms/logout" style="background: #6c757d;">🚪 Logout</a>
+            </div>
+        </nav>
+
+        <div class="profile-container">
+            <!-- Sidebar -->
+            <div class="profile-sidebar">
+                <div class="profile-header">
+                    <div class="profile-avatar">👨‍⚕️</div>
+                    <h2 th:text="${staff.fullName}">Staff Name</h2>
+                    <p th:text="${staff.designation}">Staff Designation</p>
+                    <p th:if="${staff.active}" class="active-status">✅ Active</p>
+                    <p th:unless="${staff.active}" style="color: #dc3545;">❌ Inactive</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${staff.staffId}">STAFF001</div>
+                        <div>Staff ID</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" th:text="${#dates.format(staff.joinDate, 'dd/MM/yyyy')}">01/01/2024</div>
+                        <div>Join Date</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <a href="#" class="btn btn-primary" style="width: 100%; text-align: center; margin-bottom: 0.5rem;">
+                        ✏️ Edit Profile
+                    </a>
+                    <a href="/bms/staff/dashboard" class="btn btn-primary" style="width: 100%; text-align: center; background: #6c757d;">
+                        📊 Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-main">
+                <h2>Personal Information</h2>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Full Name:</strong><br>
+                        <span th:text="${staff.fullName}">Staff Member Name</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Email Address:</strong><br>
+                        <span th:text="${staff.email}">staff@bloodbank.com</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Phone Number:</strong><br>
+                        <span th:text="${staff.phoneNumber}">9876543210</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Department:</strong><br>
+                        <span th:text="${staff.department}">Blood Bank Operations</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Designation:</strong><br>
+                        <span th:text="${staff.designation}">Staff Member</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Staff ID:</strong><br>
+                        <span th:text="${staff.staffId}">STAFF001</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1rem;">
+                    <strong>Qualifications:</strong><br>
+                    <span th:text="${staff.qualifications} ?: 'No qualifications specified'">B.Sc. Medical Technology</span>
+                </div>
+
+                <h2 style="margin-top: 2rem;">Employment Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Join Date:</strong><br>
+                        <span th:text="${#dates.format(staff.joinDate, 'dd/MM/yyyy')}">01/01/2024</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Employment Status:</strong><br>
+                        <span th:if="${staff.active}" style="color: #28a745;">✅ Active</span>
+                        <span th:unless="${staff.active}" style="color: #dc3545;">❌ Inactive</span>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 2rem;">Contact Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Address:</strong><br>
+                        <span th:text="${staff.address} ?: 'No address specified'">Staff residential address</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>City:</strong><br>
+                        <span th:text="${staff.city} ?: 'Not specified'">Mumbai</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>State:</strong><br>
+                        <span th:text="${staff.state} ?: 'Not specified'">Maharashtra</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Pincode:</strong><br>
+                        <span th:text="${staff.pincode} ?: 'Not specified'">400001</span>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div style="margin-top: 2rem; padding: 1.5rem; background: #fff3cd; border-radius: 8px;">
+                    <h3>📞 Emergency Contact</h3>
+                    <p><strong>Blood Bank Helpline:</strong> +91-9876543210</p>
+                    <p><strong>Admin Contact:</strong> admin@bloodbank.com</p>
+                    <p><strong>Technical Support:</strong> support@bloodbank.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

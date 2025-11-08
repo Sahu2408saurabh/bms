@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Registration - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: #dc3545; color: white; padding: 1.5rem; text-align: center; border-radius: 10px 10px 0 0; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; margin: 0 0.5rem; }
+        .form-container { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: #dc3545; 
+        }
+        .btn { 
+            background: #dc3545; 
+            color: white; 
+            padding: 1rem 2rem; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn:hover { background: #c82333; }
+        .alert { 
+            padding: 1rem; 
+            border-radius: 5px; 
+            margin-bottom: 1rem; 
+        }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+        .required::after { content: " *"; color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🩸 Donor Registration</h1>
+            <p>Join us in saving lives - Become a blood donor today!</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">Home</a>
+            <a href="/bms/donor/register">Donor Registration</a>
+            <a href="/bms/blood/availability">Blood Availability</a>
+            <a href="/bms/donor/list">Donor List</a>
+            <a href="/bms/login">Login</a>
+        </nav>
+        
+        <div class="form-container">
+            <!-- Success Message -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                Registration successful! Thank you for registering as a blood donor.
+            </div>
+            
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-error" style="display: none;">
+                Registration failed! Please try again.
+            </div>
+            
+            <form action="/bms/donor/register" method="post">
+                <!-- Personal Information -->
+                <h3>Personal Information</h3>
+                
+                <div class="form-group">
+                    <label for="fullName" class="required">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber" class="required">Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="required">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dateOfBirth">Date of Birth</label>
+                        <input type="date" id="dateOfBirth" name="dateOfBirth">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bloodGroup" class="required">Blood Group</label>
+                        <select id="bloodGroup" name="bloodGroup" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A_POSITIVE">A+</option>
+                            <option value="A_NEGATIVE">A-</option>
+                            <option value="B_POSITIVE">B+</option>
+                            <option value="B_NEGATIVE">B-</option>
+                            <option value="O_POSITIVE">O+</option>
+                            <option value="O_NEGATIVE">O-</option>
+                            <option value="AB_POSITIVE">AB+</option>
+                            <option value="AB_NEGATIVE">AB-</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Address Information -->
+                <h3>Address Information</h3>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3" placeholder="Enter your full address"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" placeholder="Enter your city">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state" placeholder="Enter your state">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" name="pincode" placeholder="Enter pincode">
+                    </div>
+                </div>
+                
+                <!-- Health Information -->
+                <h3>Health Information</h3>
+                
+                <div class="form-group">
+                    <label for="healthInfo">Health Information (Any allergies, medications, or health conditions)</label>
+                    <textarea id="healthInfo" name="healthInfo" rows="4" placeholder="Enter any relevant health information"></textarea>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="btn">Register as Donor</button>
+                    <a href="/bms/" class="btn" style="background: #6c757d; margin-left: 1rem;">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Check URL parameters for messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('success')) {
+                document.getElementById('successMessage').style.display = 'block';
+            }
+            
+            if (urlParams.get('error')) {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

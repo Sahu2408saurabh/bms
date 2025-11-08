@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blood Request Confirmation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #dc3545; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background: #f9f9f9; }
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
+        .urgent { background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🆘 Blood Request Received</h1>
+        </div>
+        <div class="content">
+            <h2>Dear <span th:text="${patientName}">Patient</span>'s Family,</h2>
+            <p>We have received your blood request for <strong th:text="${bloodGroup}">Blood Group</strong>.</p>
+            
+            <div class="urgent">
+                <h3>📋 Request Details:</h3>
+                <p><strong>Status:</strong> ✅ Received & Under Processing</p>
+                <p><strong>Priority:</strong> High Priority</p>
+                <p><strong>Next Steps:</strong> Our team will contact you within 1 hour</p>
+            </div>
+
+            <h3>What to Expect:</h3>
+            <ul>
+                <li>Our coordinator will call you for verification</li>
+                <li>We'll check blood availability in our inventory</li>
+                <li>We'll connect you with suitable donors if needed</li>
+                <li>Regular updates on your request status</li>
+            </ul>
+
+            <h3>🆘 Emergency Support:</h3>
+            <p>For immediate assistance, call our 24/7 helpline:<br>
+            <strong>📞 +91-9876543210</strong></p>
+
+            <p><strong>Track Your Request:</strong><br>
+            <a href="http://localhost:8080/bms/recipient/track">Click here to track your request status</a></p>
+        </div>
+        <div class="footer">
+            <p>We're here to help in this critical time<br>
+            Blood Bank Management System<br>
+            🕒 24/7 Emergency Service Available</p>
+        </div>
+    </div>
+</body>
+</html>

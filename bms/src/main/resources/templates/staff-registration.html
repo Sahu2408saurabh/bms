@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Registration - Blood Bank</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { background: #17a2b8; color: white; padding: 1.5rem; text-align: center; border-radius: 10px 10px 0 0; }
+        nav { background: #333; padding: 1rem; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; margin: 0 0.5rem; }
+        .form-container { 
+            background: white; 
+            padding: 2rem; 
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 0.75rem; 
+            border: 2px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; 
+            border-color: #17a2b8; 
+        }
+        .btn { 
+            background: #17a2b8; 
+            color: white; 
+            padding: 1rem 2rem; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            transition: background 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn:hover { background: #138496; }
+        .alert { 
+            padding: 1rem; 
+            border-radius: 5px; 
+            margin-bottom: 1rem; 
+        }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .form-row { display: flex; gap: 1rem; }
+        .form-row .form-group { flex: 1; }
+        .required::after { content: " *"; color: #dc3545; }
+        .info-box { background: #d1ecf1; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>👨‍💼 Staff Registration</h1>
+            <p>Join our Blood Bank team - Application under admin approval</p>
+        </header>
+        
+        <nav>
+            <a href="/bms/">🏠 Home</a>
+            <a href="/bms/donor/register">🎯 Donor Registration</a>
+            <a href="/bms/staff/register" style="background: #17a2b8;">👨‍💼 Staff Registration</a>
+            <a href="/bms/login">🔐 Login</a>
+        </nav>
+        
+        <div class="form-container">
+            <!-- Success Message -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                Registration submitted successfully! Your application is under review. We will contact you soon.
+            </div>
+            
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-error" style="display: none;">
+                Registration failed! Please try again.
+            </div>
+
+            <!-- Information Box -->
+            <div class="info-box">
+                <h3>📋 Registration Process</h3>
+                <ul style="margin-top: 1rem; line-height: 1.6;">
+                    <li>✅ Fill the registration form below</li>
+                    <li>✅ Submit for admin approval</li>
+                    <li>✅ Admin will review your application</li>
+                    <li>✅ You'll receive email notification upon approval</li>
+                    <li>✅ Then you can login with your credentials</li>
+                </ul>
+            </div>
+            
+            <form action="/bms/staff/register" method="post">
+                <!-- Personal Information -->
+                <h3>Personal Information</h3>
+                
+                <div class="form-group">
+                    <label for="fullName" class="required">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phoneNumber" class="required">Phone Number</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your phone number" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password" class="required">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter password" required minlength="6">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="department" class="required">Department</label>
+                        <select id="department" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="Blood Bank Operations">Blood Bank Operations</option>
+                            <option value="Donor Management">Donor Management</option>
+                            <option value="Laboratory">Laboratory</option>
+                            <option value="Medical Team">Medical Team</option>
+                            <option value="Administration">Administration</option>
+                            <option value="Technical Support">Technical Support</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="designation" class="required">Designation</label>
+                        <input type="text" id="designation" name="designation" placeholder="Enter your designation" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="qualifications">Qualifications</label>
+                        <input type="text" id="qualifications" name="qualifications" placeholder="e.g., B.Sc. Medical Technology">
+                    </div>
+                </div>
+
+                <!-- Address Information -->
+                <h3>Address Information</h3>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3" placeholder="Enter your full address"></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" placeholder="Enter your city">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state" placeholder="Enter your state">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" name="pincode" placeholder="Enter pincode">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <button type="submit" class="btn">Submit Registration</button>
+                    <a href="/bms/" class="btn" style="background: #6c757d; margin-left: 1rem;">Cancel</a>
+                </div>
+            </form>
+
+            <!-- Contact Information -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                <h3>📞 Need Help?</h3>
+                <p>For any queries regarding staff registration, contact our admin team:</p>
+                <p><strong>Email:</strong> admin@bloodbank.com</p>
+                <p><strong>Phone:</strong> +91-9876543210</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check URL parameters for messages
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.get('success')) {
+                document.getElementById('successMessage').style.display = 'block';
+            }
+            
+            if (urlParams.get('error')) {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+
+            // Password strength indicator (basic)
+            const passwordInput = document.getElementById('password');
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                if (password.length > 0 && password.length < 6) {
+                    this.style.borderColor = '#dc3545';
+                } else if (password.length >= 6) {
+                    this.style.borderColor = '#28a745';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

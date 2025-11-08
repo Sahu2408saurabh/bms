@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Blood Inventory - Staff</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        header { background: #007bff; color: white; padding: 1rem; text-align: center; }
+        nav { background: #333; padding: 1rem; display: flex; justify-content: space-between; }
+        nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; }
+        .main-content { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .table-container { overflow-x: auto; margin: 1rem 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        .btn { padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .status-available { background: #d4edda; color: #155724; padding: 0.3rem 0.8rem; border-radius: 20px; }
+        .status-critical { background: #fff3cd; color: #856404; padding: 0.3rem 0.8rem; border-radius: 20px; }
+        .status-out-of-stock { background: #f8d7da; color: #721c24; padding: 0.3rem 0.8rem; border-radius: 20px; }
+        .stats { display: flex; gap: 1rem; margin: 1rem 0; }
+        .stat-card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); flex: 1; text-align: center; border-top: 4px solid #dc3545; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #dc3545; }
+        .alert { padding: 1rem; border-radius: 8px; margin: 1rem 0; }
+        .alert-warning { background: #fff3cd; color: #856404; }
+        .inventory-form { display: none; background: #f8f9fa; padding: 1rem; border-radius: 5px; margin: 0.5rem 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🩸 Manage Blood Inventory - Staff Panel</h1>
+        </header>
+        
+        <nav>
+            <div>
+                <a href="/bms/staff/dashboard">📊 Dashboard</a>
+                <a href="/bms/staff/requests">🆘 Requests</a>
+                <a href="/bms/staff/donations">💉 Donations</a>
+                <a href="/bms/staff/inventory" style="background: #007bff;">🩸 Inventory</a>
+            </div>
+            <div>
+                <a href="/bms/staff/profile">👤 Profile</a>
+                <a href="/bms/logout" style="background: #6c757d;">🚪 Logout</a>
+            </div>
+        </nav>
+
+        <div class="main-content">
+            <h2>Blood Inventory Management</h2>
+
+            <!-- Success/Error Messages -->
+            <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${#lists.size(inventory)}">8</div>
+                    <div>Blood Groups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${totalUnits}">153</div>
+                    <div>Total Units</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${availableGroups}">6</div>
+                    <div>Available Groups</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${criticalGroups}">2</div>
+                    <div>Critical Stock</div>
+                </div>
+            </div>
+
+            <!-- Low Stock Alert -->
+            <div th:if="${criticalGroups > 0}" class="alert alert-warning">
+                ⚠️ <strong>Alert:</strong> <span th:text="${criticalGroups}">2</span> blood groups are running low on stock!
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Blood Group</th>
+                            <th>Available Units</th>
+                            <th>Quantity (ML)</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${inventory}">
+                            <td><strong th:text="${item.bloodGroup.displayName}">A+</strong></td>
+                            <td th:text="${item.availableUnits}">25</td>
+                            <td th:text="${item.quantityML} + ' ML'">5000 ML</td>
+                            <td>
+                                <span th:classappend="'status-' + ${item.status.toLowerCase()}"
+                                      th:text="${item.status}">
+                                    AVAILABLE
+                                </span>
+                            </td>
+                            <td th:text="${#dates.format(item.lastUpdated, 'dd/MM/yyyy')}">30/09/2024</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" 
+                                        th:onclick="'showUpdateForm(' + ${item.id} + ')'">
+                                    ✏️ Update
+                                </button>
+                                
+                                <!-- Update Form (Hidden by default) -->
+                                <div class="inventory-form" th:id="'form-' + ${item.id}">
+                                    <form th:action="@{/staff/inventory/update}" method="post">
+                                        <input type="hidden" name="inventoryId" th:value="${item.id}">
+                                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                            <input type="number" name="availableUnits" 
+                                                   th:value="${item.availableUnits}" 
+                                                   min="0" max="100" 
+                                                   style="width: 100px; padding: 0.3rem;">
+                                            <button type="submit" class="btn btn-success">💾 Save</button>
+                                            <button type="button" class="btn btn-secondary" 
+                                                    th:onclick="'hideUpdateForm(' + ${item.id} + ')'">❌ Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Stock Guidelines -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: #e9ecef; border-radius: 8px;">
+                <h3>📊 Stock Management Guidelines</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="background: #d4edda; padding: 1rem; border-radius: 5px;">
+                            <strong>🟢 Available</strong>
+                            <p>10+ Units<br>Safe Stock Level</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: #fff3cd; padding: 1rem; border-radius: 5px;">
+                            <strong>🟡 Critical</strong>
+                            <p>4-9 Units<br>Reorder Needed</p>
+                        </div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="background: #f8d7da; padding: 1rem; border-radius: 5px;">
+                            <strong>🔴 Out of Stock</strong>
+                            <p>0-3 Units<br>Emergency Only</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <a href="/bms/staff/dashboard" class="btn btn-primary">📊 Back to Dashboard</a>
+                <a href="/bms/staff/donations/new" class="btn btn-success">➕ Record Donation</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showUpdateForm(inventoryId) {
+            // Hide all other forms
+            document.querySelectorAll('.inventory-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            // Show the selected form
+            document.getElementById('form-' + inventoryId).style.display = 'block';
+        }
+
+        function hideUpdateForm(inventoryId) {
+            document.getElementById('form-' + inventoryId).style.display = 'none';
+        }
+
+        // Auto-hide forms when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.inventory-form') && !event.target.closest('.btn-primary')) {
+                document.querySelectorAll('.inventory-form').forEach(form => {
+                    form.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
